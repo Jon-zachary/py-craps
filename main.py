@@ -1,5 +1,6 @@
 import random as rnd
 from tabnanny import check
+import json
 
 class Dice:
   face1 = None
@@ -11,46 +12,87 @@ class Dice:
     return [self.face1, self.face2]
 
 class Player():
-  def __init__(self, name, sbr):
+  def __init__(self, name, bankroll):
     self.name = name
-    self.sbr = int(sbr)
+    self.bankroll = int(bankroll)
 
-def check_roll(roll):
-  if sum(roll) == 7:
-    print('seven seven')
-    return True
+class Game():
+  def __init__(self):
+    self.player = None
+    self.is_come_out = True
+    self.point = None
+    self.dice = Dice()
+    self.rolls = []
+    self.working_bets = []
 
-def til_seven(dice):
-  while True:
-    roll = dice.roll()
-    print(roll[0],roll[1])
-    if check_roll(roll):
-      break
+  def add_roll(self, roll):
+    self.rolls.push(roll)
+  def add_working_bet(self, bet):
+    self.working_bets.push(bet)
 
 
-dice = Dice()
+
+
 # TODO make sure user input is two values, space seperated, one string one int
-name, sbr = input('enter name and starting bank roll: ').split(' ')
-player = Player(name, sbr)
+def setup(game):
+ # name, bankroll = input('enter name and starting bankroll: ').split(' ')
+  game.player = Player('jon', 100)
+  print(f"Welcome to command line craps {game.player.name}")
 
+
+def come_out(game):
+  roll = game.dice.roll()
+  if sum(roll) in [7, 11]:
+    print(f"winner {sum(roll)}")
+  elif sum(roll) in [2, 3, 12]:
+    print(f"{sum(roll)} craps")
+  else:
+    game.point = sum(roll)
+    print(f"the point is {game.point}")
+    game.is_come_out = False
+
+def on_point(game):
+  roll = game.dice.roll()
+  if sum(roll) == game.point:
+    print(f"Winner! you hit your point {game.point}")
+    game.point = None
+  elif sum(roll) == 7:
+    print("Seven out, pay the don't")
+    game.point = None
+
+  elif game.point: 
+    print(f"the point is {game.point}, you rolled a {sum(roll)}")
 
 def check_input(player_input):
   return player_input in ['r', 'e']
 
-def welcome():
-  player_input = input(f'welcome to command line craps {player.name}, press r to roll or e to exit: ')
+def roll_or_quit():
+  player_input = input('press r to roll or e to exit: ')
   check_input(player_input)
   return player_input
 
 
-def play_game():
-  player_input = welcome()
-  
+def get_player_input():
+  player_input = roll_or_quit()
   while not check_input(player_input):
-    player_input = welcome()
+    player_input = roll_or_quit()
+  return player_input
+
+
+def play_game():
+  game = Game()
+  setup(game)
+  player_input = get_player_input()
+
 
   if player_input == 'r':
-    til_seven(dice)
+    while not game.point and player_input == 'r':
+      come_out(game) 
+      player_input = get_player_input()
+    while game.point != None and player_input == 'r': 
+      on_point(game)
+      player_input = get_player_input()
+
   elif player_input == 'e':
     exit()
 
