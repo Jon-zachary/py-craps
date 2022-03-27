@@ -26,7 +26,7 @@ class Game():
     self.point = None
     self.dice = Dice()
     self.rolls = []
-    self.working_bets = []
+    self.working_bets = [10]
 
   def add_roll(self, roll):
     self.rolls.push(roll)
@@ -47,8 +47,10 @@ def come_out(game):
   roll = game.dice.roll()
   if sum(roll) in [7, 11]:
     print(f"winner {sum(roll)}")
+    on_win(game)
   elif sum(roll) in [2, 3, 12]:
     print(f"{sum(roll)} craps")
+    on_loss(game)
   else:
     game.point = sum(roll)
     print(f"the point is {game.point}")
@@ -58,9 +60,11 @@ def on_point(game):
   roll = game.dice.roll()
   if sum(roll) == game.point:
     print(f"Winner! you hit your point {game.point}")
+    on_win(game)
     game.point = None
   elif sum(roll) == 7:
     print("Seven out, pay the don't")
+    on_loss(game)
     game.point = None
   else: 
     print(f"the point is {game.point}, you rolled a {sum(roll)}")
@@ -79,23 +83,33 @@ def get_player_input():
     player_input = roll_or_quit()
   return player_input
 
+def on_win(game):
+  bet_amount = game.working_bets[0]
+  game.player.bankroll += bet_amount
+  print(f"you added {bet_amount} to your bankroll for a total of {game.player.bankroll}")
+
+def on_loss(game):
+  bet_amount = game.working_bets[0]
+  game.player.bankroll -= bet_amount
+  print(f"you lost {bet_amount} your bankroll is now {game.player.bankroll}")
 
 def play_game():
   game = Game()
   setup(game)
-  player_input = get_player_input()
-
-  if player_input == 'r':
-    while not game.point:
-      come_out(game) 
-      player_input = get_player_input()
-    while game.point != None: 
-      on_point(game)
-      player_input = get_player_input()
-
-  elif player_input == 'e':
-    exit()
-
+  player_input = 'r'
+  while player_input == 'r':
+    if player_input == 'r':
+      while not game.point:
+        come_out(game) 
+        player_input = get_player_input()
+        if player_input == 'e':
+          exit()
+      while game.point != None: 
+        on_point(game)
+        player_input = get_player_input()
+        if player_input == 'e':
+          exit()
+          
 play_game()
 
 
