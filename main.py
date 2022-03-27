@@ -3,6 +3,7 @@ from tabnanny import check
 import json
 
 class Dice:
+  """Creates a pair of six sided dice with a roll method"""
   face1 = None
   face2 = None
 
@@ -12,11 +13,13 @@ class Dice:
     return [self.face1, self.face2]
 
 class Player():
+  """Creates a player object with a name and bankroll"""
   def __init__(self, name, bankroll):
     self.name = name
     self.bankroll = int(bankroll)
 
 class Game():
+  """Creates a game with game state and player and dice instances"""
   def __init__(self):
     self.player = None
     self.is_come_out = True
@@ -35,10 +38,10 @@ class Game():
 
 # TODO make sure user input is two values, space seperated, one string one int
 def setup(game):
+  """Sets the init player state and adds it to a game"""
  # name, bankroll = input('enter name and starting bankroll: ').split(' ')
   game.player = Player('jon', 100)
   print(f"Welcome to command line craps {game.player.name}")
-
 
 def come_out(game):
   roll = game.dice.roll()
@@ -59,8 +62,7 @@ def on_point(game):
   elif sum(roll) == 7:
     print("Seven out, pay the don't")
     game.point = None
-
-  elif game.point: 
+  else: 
     print(f"the point is {game.point}, you rolled a {sum(roll)}")
 
 def check_input(player_input):
@@ -70,7 +72,6 @@ def roll_or_quit():
   player_input = input('press r to roll or e to exit: ')
   check_input(player_input)
   return player_input
-
 
 def get_player_input():
   player_input = roll_or_quit()
@@ -84,12 +85,11 @@ def play_game():
   setup(game)
   player_input = get_player_input()
 
-
   if player_input == 'r':
-    while not game.point and player_input == 'r':
+    while not game.point:
       come_out(game) 
       player_input = get_player_input()
-    while game.point != None and player_input == 'r': 
+    while game.point != None: 
       on_point(game)
       player_input = get_player_input()
 
