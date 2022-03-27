@@ -26,7 +26,7 @@ class Game():
     self.point = None
     self.dice = Dice()
     self.rolls = []
-    self.working_bets = [10]
+    self.working_bets = []
 
   def add_roll(self, roll):
     self.rolls.push(roll)
@@ -44,6 +44,7 @@ def setup(game):
   print(f"Welcome to command line craps {game.player.name}")
 
 def come_out(game):
+  place_bet(game)
   roll = game.dice.roll()
   if sum(roll) in [7, 11]:
     print(f"winner {sum(roll)}")
@@ -84,32 +85,35 @@ def get_player_input():
   return player_input
 
 def on_win(game):
-  bet_amount = game.working_bets[0]
+  bet_amount = int(game.working_bets[0])
   game.player.bankroll += bet_amount
   print(f"you added {bet_amount} to your bankroll for a total of {game.player.bankroll}")
 
 def on_loss(game):
-  bet_amount = game.working_bets[0]
+  bet_amount = int(game.working_bets[0])
   game.player.bankroll -= bet_amount
   print(f"you lost {bet_amount} your bankroll is now {game.player.bankroll}")
+
+def place_bet(game):
+  bet_amount = input("Enter your bet amount: ")
+  game.working_bets.insert(0, bet_amount)
 
 def play_game():
   game = Game()
   setup(game)
   player_input = 'r'
   while player_input == 'r':
-    if player_input == 'r':
-      while not game.point:
-        come_out(game) 
-        player_input = get_player_input()
-        if player_input == 'e':
-          exit()
-      while game.point != None: 
-        on_point(game)
-        player_input = get_player_input()
-        if player_input == 'e':
-          exit()
-          
+    while not game.point:
+      come_out(game) 
+      player_input = get_player_input()
+      if player_input == 'e':
+        exit()
+    while game.point != None: 
+      on_point(game)
+      player_input = get_player_input()
+      if player_input == 'e':
+        exit()
+
 play_game()
 
 
