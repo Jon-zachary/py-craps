@@ -101,18 +101,23 @@ def place_bet(game):
 def play_game():
   game = Game()
   setup(game)
-  player_input = 'r'
-  while player_input == 'r':
+  player_input = None
+  while player_input == 'r' or player_input == None:
     while not game.point:
       come_out(game) 
       player_input = get_player_input()
       if player_input == 'e':
         exit()
-    while game.point != None: 
+
+    while game.point: 
       on_point(game)
       player_input = get_player_input()
       if player_input == 'e':
         exit()
+
+  player_input = get_player_input()
+  if player_input == 'e':
+      exit()
 
 play_game()
 
