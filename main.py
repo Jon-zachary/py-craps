@@ -35,13 +35,18 @@ class Game():
 
 
 
-
-# TODO make sure user input is two values, space seperated, one string one int
 def setup(game):
-  """Sets the init player state and adds it to a game"""
- # name, bankroll = input('enter name and starting bankroll: ').split(' ')
-  game.player = Player('jon', 100)
-  print(f"Welcome to command line craps {game.player.name}")
+  try:
+    """Sets the init player state and adds it to a game"""
+    name, bankroll = input('enter name and starting bankroll: ').split(' ')
+    bankroll = int(bankroll)
+    game.player = Player(name, bankroll)
+    if (type(name) != str) or (type(bankroll) != int):
+      raise ValueError
+    print(f"Welcome to command line craps {game.player.name}")
+  except ValueError:
+    print("Oops! Please enter your name followed by your bankroll e.g 'jon 10000'")
+    setup(game)
 
 def come_out(game):
   place_bet(game)
@@ -94,6 +99,7 @@ def on_loss(game):
   game.player.bankroll -= bet_amount
   print(f"you lost {bet_amount} your bankroll is now {game.player.bankroll}")
 
+#TODO make sure input is an int and does not exceed bankroll
 def place_bet(game):
   bet_amount = input("Enter your bet amount: ")
   game.working_bets.insert(0, bet_amount)
