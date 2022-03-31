@@ -48,6 +48,7 @@ def setup(game):
     print("Oops! Please enter your name followed by your bankroll e.g 'jon 10000'")
     setup(game)
 
+
 def come_out(game):
   place_bet(game)
   roll = game.dice.roll()
@@ -61,6 +62,7 @@ def come_out(game):
     game.point = sum(roll)
     print(f"the point is {game.point}")
     game.is_come_out = False
+
 
 def on_point(game):
   roll = game.dice.roll()
@@ -100,10 +102,21 @@ def on_loss(game):
   print(f"you lost {bet_amount} your bankroll is now {game.player.bankroll}")
 
 #TODO make sure input is an int and does not exceed bankroll
+def check_bet(game, bet):
+  if bet > game.player.bankroll:
+    print(f"That bet is more than you have, your maximum bet is {game.player.bankroll}")
+    return False
+  return True
+
 def place_bet(game):
   bet_amount = input("Enter your bet amount: ")
-  game.working_bets.insert(0, bet_amount)
+  if check_bet(game, int(bet_amount)):
+     game.working_bets.insert(0, bet_amount)
+     return
+  place_bet(game)
 
+
+# FIX ask player to roll or quit after bet
 def play_game():
   game = Game()
   setup(game)
