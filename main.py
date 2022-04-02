@@ -53,6 +53,11 @@ class Game():
       return
     self.place_bet()
 
+  def on_win(self):
+    bet_amount = int(self.working_bets[0])
+    self.player.bankroll += bet_amount
+    print(f"you added {bet_amount} to your bankroll for a total of {self.player.bankroll}")
+# END OF CLASS
 
 
 
@@ -62,7 +67,7 @@ def come_out(game):
   roll = game.dice.roll()
   if sum(roll) in [7, 11]:
     print(f"winner {sum(roll)}")
-    on_win(game)
+    game.on_win()
   elif sum(roll) in [2, 3, 12]:
     print(f"{sum(roll)} craps")
     on_loss(game)
@@ -76,7 +81,7 @@ def on_point(game):
   roll = game.dice.roll()
   if sum(roll) == game.point:
     print(f"Winner! you hit your point {game.point}")
-    on_win(game)
+    game.on_win()
     game.point = None
   elif sum(roll) == 7:
     print("Seven out, pay the don't")
@@ -98,11 +103,6 @@ def get_player_input():
   while not check_input(player_input):
     player_input = roll_or_quit()
   return player_input
-
-def on_win(game):
-  bet_amount = int(game.working_bets[0])
-  game.player.bankroll += bet_amount
-  print(f"you added {bet_amount} to your bankroll for a total of {game.player.bankroll}")
 
 def on_loss(game):
   bet_amount = int(game.working_bets[0])
