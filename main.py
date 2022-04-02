@@ -33,20 +33,21 @@ class Game():
   def add_working_bet(self, bet):
     self.working_bets.push(bet)
 
+  def setup(self):
+    try:
+      """Sets the init player state and adds it to a game"""
+      name, bankroll = input('enter name and starting bankroll: ').split(' ')
+      bankroll = int(bankroll)
+      self.player = Player(name, bankroll)
+      if (type(name) != str) or (type(bankroll) != int):
+        raise ValueError
+      print(f"Welcome to command line craps {self.player.name}")
+    except ValueError:
+      print("Oops! Please enter your name followed by your bankroll e.g 'jon 10000'")
+      self.setup()
 
 
-def setup(game):
-  try:
-    """Sets the init player state and adds it to a game"""
-    name, bankroll = input('enter name and starting bankroll: ').split(' ')
-    bankroll = int(bankroll)
-    game.player = Player(name, bankroll)
-    if (type(name) != str) or (type(bankroll) != int):
-      raise ValueError
-    print(f"Welcome to command line craps {game.player.name}")
-  except ValueError:
-    print("Oops! Please enter your name followed by your bankroll e.g 'jon 10000'")
-    setup(game)
+
 
 
 def come_out(game):
@@ -119,7 +120,7 @@ def place_bet(game):
 # FIX ask player to roll or quit after bet
 def play_game():
   game = Game()
-  setup(game)
+  game.setup()
   player_input = None
   while player_input == 'r' or player_input == None:
     while not game.point:
