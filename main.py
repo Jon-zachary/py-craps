@@ -11,12 +11,14 @@ class Dice:
     self.face1 = rnd.randrange(1,7)
     self.face2 = rnd.randrange(1,7)
     return [self.face1, self.face2]
+# END OF CLASS
 
 class Player():
   """Creates a player object with a name and bankroll"""
   def __init__(self, name, bankroll):
     self.name = name
     self.bankroll = int(bankroll)
+# END OF CLASS
 
 class Game():
   """Creates a game with game state and player and dice instances"""
@@ -105,17 +107,11 @@ def get_player_input():
     player_input = roll_or_quit()
   return player_input
 
-
-
-#TODO make sure input is an int and does not exceed bankroll
 def check_bet(game, bet):
   if bet > game.player.bankroll:
     print(f"That bet is more than you have, your maximum bet is {game.player.bankroll}")
     return False
   return True
-
-
-
 
 # FIX ask player to roll or quit after bet
 def play_game():
