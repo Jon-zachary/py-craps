@@ -57,6 +57,11 @@ class Game():
     bet_amount = int(self.working_bets[0])
     self.player.bankroll += bet_amount
     print(f"you added {bet_amount} to your bankroll for a total of {self.player.bankroll}")
+
+  def on_loss(self):
+    bet_amount = int(self.working_bets[0])
+    self.player.bankroll -= bet_amount
+    print(f"you lost {bet_amount} your bankroll is now {self.player.bankroll}")
 # END OF CLASS
 
 
@@ -70,7 +75,7 @@ def come_out(game):
     game.on_win()
   elif sum(roll) in [2, 3, 12]:
     print(f"{sum(roll)} craps")
-    on_loss(game)
+    game.on_loss()
   else:
     game.point = sum(roll)
     print(f"the point is {game.point}")
@@ -85,7 +90,7 @@ def on_point(game):
     game.point = None
   elif sum(roll) == 7:
     print("Seven out, pay the don't")
-    on_loss(game)
+    game.on_loss()
     game.point = None
   else: 
     print(f"the point is {game.point}, you rolled a {sum(roll)}")
@@ -104,10 +109,7 @@ def get_player_input():
     player_input = roll_or_quit()
   return player_input
 
-def on_loss(game):
-  bet_amount = int(game.working_bets[0])
-  game.player.bankroll -= bet_amount
-  print(f"you lost {bet_amount} your bankroll is now {game.player.bankroll}")
+
 
 #TODO make sure input is an int and does not exceed bankroll
 def check_bet(game, bet):
