@@ -62,38 +62,34 @@ class Game():
     bet_amount = int(self.working_bets[0])
     self.player.bankroll -= bet_amount
     print(f"you lost {bet_amount} your bankroll is now {self.player.bankroll}")
+
+  def on_point(self):
+    roll = self.dice.roll()
+    if sum(roll) == self.point:
+      print(f"Winner! you hit your point {self.point}")
+      self.on_win()
+      self.point = None
+    elif sum(roll) == 7:
+      print("Seven out, pay the don't")
+      self.on_loss()
+      self.point = None
+    else:
+      print(f"the point is {self.point}, you rolled a {sum(roll)}")
+
+  def come_out(self):
+    self.place_bet()
+    roll = self.dice.roll()
+    if sum(roll) in [7, 11]:
+      print(f"winner {sum(roll)}")
+      self.on_win()
+    elif sum(roll) in [2, 3, 12]:
+      print(f"{sum(roll)} craps")
+      self.on_loss()
+    else:
+      self.point = sum(roll)
+      print(f"the point is {self.point}")
+      self.is_come_out = False
 # END OF CLASS
-
-
-
-
-def come_out(game):
-  game.place_bet()
-  roll = game.dice.roll()
-  if sum(roll) in [7, 11]:
-    print(f"winner {sum(roll)}")
-    game.on_win()
-  elif sum(roll) in [2, 3, 12]:
-    print(f"{sum(roll)} craps")
-    game.on_loss()
-  else:
-    game.point = sum(roll)
-    print(f"the point is {game.point}")
-    game.is_come_out = False
-
-
-def on_point(game):
-  roll = game.dice.roll()
-  if sum(roll) == game.point:
-    print(f"Winner! you hit your point {game.point}")
-    game.on_win()
-    game.point = None
-  elif sum(roll) == 7:
-    print("Seven out, pay the don't")
-    game.on_loss()
-    game.point = None
-  else: 
-    print(f"the point is {game.point}, you rolled a {sum(roll)}")
 
 def check_input(player_input):
   return player_input in ['r', 'e']
@@ -128,13 +124,13 @@ def play_game():
   player_input = None
   while player_input == 'r' or player_input == None:
     while not game.point:
-      come_out(game) 
+      game.come_out() 
       player_input = get_player_input()
       if player_input == 'e':
         exit()
 
     while game.point: 
-      on_point(game)
+      game.on_point()
       player_input = get_player_input()
       if player_input == 'e':
         exit()
