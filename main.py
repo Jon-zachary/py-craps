@@ -46,12 +46,19 @@ class Game():
       print("Oops! Please enter your name followed by your bankroll e.g 'jon 10000'")
       self.setup()
 
+  def place_bet(self):
+    bet_amount = input("Enter your bet amount: ")
+    if check_bet(self, int(bet_amount)):
+      self.working_bets.insert(0, bet_amount)
+      return
+    self.place_bet()
+
 
 
 
 
 def come_out(game):
-  place_bet(game)
+  game.place_bet()
   roll = game.dice.roll()
   if sum(roll) in [7, 11]:
     print(f"winner {sum(roll)}")
@@ -109,12 +116,7 @@ def check_bet(game, bet):
     return False
   return True
 
-def place_bet(game):
-  bet_amount = input("Enter your bet amount: ")
-  if check_bet(game, int(bet_amount)):
-     game.working_bets.insert(0, bet_amount)
-     return
-  place_bet(game)
+
 
 
 # FIX ask player to roll or quit after bet
