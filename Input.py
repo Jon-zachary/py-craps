@@ -4,12 +4,12 @@ class Input():
   def __init__(self):
     self.unicode_to_dice = {'1': '\U00012680'}
 
-  def save_game(player):
+  def save_game(self, player):
     with open('savefile', 'wb') as f:
       pickle.dump(player, f)
       print('Game saved')
 
-  def load_game():
+  def load_game(self):
     with open('savefile', 'wb') as f:
       player = pickle.load(f)
     return player
