@@ -9,9 +9,10 @@ class Input():
       pickle.dump(player, f)
       print('Game saved')
 
-  def load_game(self):
-    with open('savefile', 'wb') as f:
+  def load_game():
+    with open('savefile', 'rb') as f:
       player = pickle.load(f)
+      print('Game loaded')
     return player
 
   def roll_or_quit(self):

@@ -1,4 +1,5 @@
 import Dice
+import Input
 import Player
 
 class Game():
@@ -19,14 +20,22 @@ class Game():
     self.working_bets.push(bet)
 
   def setup(self):
+    is_load = input("press l to load a game") == 'l'
+    if is_load:
+      player = Input.Input.load_game()
+      self.player = player
     try:
-      """Sets the init player state and adds it to a game"""
-      name, bankroll = input('enter name and starting bankroll: ').split(' ')
-      bankroll = int(bankroll)
-      self.player = Player.Player(name, bankroll)
-      if (type(name) != str) or (type(bankroll) != int):
-        raise ValueError
-      print(f"Welcome to command line craps {self.player.name}")
+      """Sets the init player state and adds it to a game
+         Allows the player to load a saved game
+      """
+      if self.player == None:
+        name, bankroll = input('enter name and starting bankroll: ').split(' ')
+        bankroll = int(bankroll)
+        self.player = Player.Player(name, bankroll)
+        if (type(name) != str) or (type(bankroll) != int):
+          raise ValueError
+      else:
+        print(f"Welcome to command line craps {self.player.name}")
     except ValueError:
       print("Oops! Please enter your name followed by your bankroll e.g 'jon 10000'")
       self.setup()
@@ -82,6 +91,3 @@ class Game():
       self.point = sum(roll)
       print(f"the point is {self.point}")
       self.is_come_out = False
-
-    
-# END OF CLASS
