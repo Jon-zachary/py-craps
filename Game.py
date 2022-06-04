@@ -4,7 +4,7 @@ import Player
 
 class Game():
   """Creates a game with game state and player and dice instances"""
-
+  welcome_message = "Welcome to command line craps! follow the prompts to continue. Press ^C at any time to exit"
   def __init__(self):
     self.player = None
     self.is_come_out = True
@@ -35,7 +35,8 @@ class Game():
         if (type(name) != str) or (type(bankroll) != int):
           raise ValueError
       else:
-        print(f"Welcome to command line craps {self.player.name}")
+        print(self.player.name)
+        print(self.welcome_message)
     except ValueError:
       print("Oops! Please enter your name followed by your bankroll e.g 'jon 10000'")
       self.setup()
